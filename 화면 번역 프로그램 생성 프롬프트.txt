@@ -1,0 +1,53 @@
+1. 프로그램 개요: Python을 사용하여 사용자가 지정한 화면 영역을 캡처하고, Tesseract OCR로 텍스트를 추출한 뒤, DeepL API를 통해 번역 결과를 화면에 오버레이하거나 상세 창으로 보여주는 GUI 프로그램을 작성해줘.
+
+2. 핵심 기술 스택:
+
+GUI: tkinter (ttk 적용)
+
+OCR: pytesseract (Tesseract OCR 엔진)
+
+Translation: deepl 공식 라이브러리
+
+Image Processing: PIL (Pillow), ImageGrab
+
+Hotkeys: keyboard 라이브러리 (비블로킹 감지)
+
+Data Handling: pandas (OCR 데이터 구조화)
+
+3. 필수 기능 요구사항:
+
+설정 관리:
+
+Tesseract 설치 경로 및 DeepL API 키를 입력받아 config.py와 config.json을 통해 영구 저장해야 함.
+
+사용자 정의 단축키 설정 기능 (키 입력을 실시간 감지하여 등록).
+
+캡처 및 번역 로직:
+
+단축키 입력 시 영역 선택(Snipping Tool 방식) 또는 전체 화면 캡처 모드 지원.
+
+OCR 시 image_to_data를 사용하여 줄(line) 단위의 좌표 데이터와 텍스트를 추출.
+
+DeepL 번역 시 EN-US, EN-GB와 같은 지역 코드와 원본 언어(OCR 언어) 코드를 사용자가 지정 가능해야 함.
+
+결과 표시 (Context Window):
+
+텍스트 뷰: 원본 OCR 텍스트와 번역된 텍스트를 분리해서 표시.
+
+오버레이 뷰 (핵심): 캡처한 이미지 위에 흰색 배경 박스를 만들고 그 위에 번역된 텍스트를 원래 위치에 맞춰 표시. 텍스트 높이에 따라 박스 크기가 자동 조절되어야 하며, 줄 간격이 겹치지 않도록 Y축 독립성 로직을 적용할 것.
+
+4. 예외 처리 및 안정성:
+
+keyboard.unhook_hotkey 대신 keyboard.remove_hotkey를 사용하여 단축키 해제 시 발생하는 AttributeError 방지.
+
+API 키 미입력 또는 Tesseract 경로 오류 시 사용자에게 명확한 알림창(messagebox) 표시.
+
+번역 프로세스는 메인 UI가 멈추지 않도록 threading을 사용하여 비동기로 처리.
+
+5. UI/UX 디자인:
+
+ttk.Style을 사용하여 '설정 저장' 버튼 등 주요 버튼에 색상 포인트(녹색 등)를 줄 것.
+
+버튼의 텍스트 색상(foreground)은 배경색과 대비를 이루어 잘 보여야 함.
+
+하단 상태 표시줄을 통해 현재 단축키 감지 상태나 오류 메시지를 실시간으로 출력.
